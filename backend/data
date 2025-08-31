@@ -1,0 +1,16 @@
+import cv2  # This imports the OpenCV library
+
+# This is the "relative path" or the directions to the image.
+# The '..' means "go up one folder" (from 'backend' to 'handwriting-behavior-detection').
+# Then it goes into the 'data' folder and finds 'my_handwriting.png'.
+image_path = '../data/my_handwriting.png'
+
+# This line uses the OpenCV tool to read the image file.
+img = cv2.imread(image_path)
+
+# This is a check to make sure the image was found and loaded correctly.
+if img is not None:
+    print("Image was loaded successfully!")
+    # Now you can use the 'img' variable to process the image.
+else:
+    print("Error: Could not find or load the image.")
