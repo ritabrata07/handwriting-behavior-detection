@@ -45,7 +45,7 @@ for epoch in range(2):  # train for 2 epochs (keep small for testing)
         running_loss += loss.item()
     print(f"Epoch {epoch+1}, Loss: {running_loss/len(trainloader)}")
 
-print("Training finished ✅")
+print("Training finished ")
 
 # 5. Save model
 torch.save(model.state_dict(), "ai_model/mnist_model.pth")
