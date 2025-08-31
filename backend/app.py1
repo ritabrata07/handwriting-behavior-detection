@@ -1,0 +1,40 @@
+from flask import Flask, request, jsonify
+import torch
+from PIL import Image
+import torchvision.transforms as transforms
+from ai_model.model import CNNModel   # Import your CNN
+
+# Initialize app
+app = Flask(__name__)
+
+# Load model
+model = CNNModel()
+model.load_state_dict(torch.load("ai_model/handwriting_model.pth", map_location="cpu"))
+model.eval()
+
+# Preprocessing
+transform = transforms.Compose([
+    transforms.Resize((128,128)),
+    transforms.ToTensor()
+])
+
+@app.route('/predict', methods=['POST'])
+def predict_behavior():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+    
+    file = request.files['file']
+    img = Image.open(file).convert("L")   # Grayscale
+    img = transform(img).unsqueeze(0)     # Add batch dimension
+
+    with torch.no_grad():
+        output = model(img)
+        _, predicted = torch.max(output, 1)
+    
+    behavior_classes = ["Calm", "Stressed", "Angry", "Focused", "Happy"]
+    result = behavior_classes[predicted.item()]
+    
+    return jsonify({"behavior": result})
+
+if __name__ == '__main__':
+    app.run(debug=True)
