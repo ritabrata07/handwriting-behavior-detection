@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    container_name: handwriting-emotion-web
+    ports:
+      - "${HOST_PORT:-5000}:5000"
+    environment:
+      MODEL_ASSET_DIR: /models
+      FLASK_ENV: production
+      PORT: 5000
+      MAX_UPLOAD_MB: 8
+    volumes:
+      - "${HOST_MODEL_ASSET_DIR:-/Users/ritabratamaity/Handwriting Project/Project/model_files}:/models:ro"
